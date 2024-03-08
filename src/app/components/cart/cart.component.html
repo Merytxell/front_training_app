@@ -12,13 +12,13 @@
               <td>{{training.id}}</td>
               <td>{{training.name}}</td>
               <td>{{training.quantity}}</td>
-              <td>{{training.price}}</td>  
+              <td>{{training.price | number : '0.2'}}</td>  
               <td class="col-sm-1"> <a class="btn btn-danger btn-sm" (click)="onRemoveFromCart(training)"> Supprimer </a> </td>
             </tr>
 
             <tr>
               <td colspan="3">Total</td>
-              <td>{{amount}}</td>
+              <td>{{amount | number : '0.2'}}</td>
             </tr>
           </tbody>
         </table>

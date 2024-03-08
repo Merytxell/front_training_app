@@ -1,5 +1,5 @@
 <div class="container">
-    <ng-container *ngIf="listTrainings">
+    <ng-container *ngIf="listTrainings else loading">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -11,11 +11,14 @@
                     <td>{{training.id}}</td>
                     <td>{{training.name}}</td>    
                     <td>{{training.description}}</td>
-                    <td>{{training.price}}</td>
+                    <td>{{training.price | number : '0.2'}}</td>
                     <td> <input type="number" name="quantity" style="width: 60px" [(ngModel)]="training.quantity" min=""> </td>
                     <td> <a class="btn btn-primary" (click)="onAddToCart(training)"> Ajouter </a></td>
                 </tr>
             </tbody>
         </table>    
     </ng-container>
+    <ng-template #loading>
+        <div>Loading...</div>
+    </ng-template>
 </div>

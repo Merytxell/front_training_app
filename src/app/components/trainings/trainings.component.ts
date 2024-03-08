@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Training } from 'src/app/model/training.model';
 import { CartService } from 'src/app/services/cart.service';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-trainings',
@@ -14,7 +15,9 @@ import { Router } from '@angular/router';
  */
 export class TrainingsComponent implements OnInit {
   listTrainings : Training[] | undefined;  
-  constructor(private cartService : CartService, private router : Router) {
+  error : null = null;
+  
+  constructor(private cartService : CartService, private router : Router, private apiService : ApiService) {
    }
 
   ngOnInit(): void {        
@@ -34,5 +37,21 @@ export class TrainingsComponent implements OnInit {
      this.cartService.addTraining(training);
      this.router.navigateByUrl('cart');
     }
+  }
+
+  //appelle méthode getTraining de l'objet apiService
+  //effectue une opération asynchrone qui peut émettre plusieurs valeurs
+  getAllTraining () {
+    this.apiService.getTrainings().subscribe({
+      //lorsque qu'une nouvelle valeur est émise par l'observable listTraining est appelée
+      //Elle prend la valeur émise comme paramètre data et affecte cette valeur à this.listTrainings
+      next :(data) => this.listTrainings=data,
+      // Si une erreur se produit pendant l'exécution de l'Observable, this.error est appelé. 
+      //Elle prend l'objet d'erreur err en paramètre et affecte son message à this.error.
+      error: (err) => this.error = err.message,
+      // Lorsque l'Observable se termine avec succès, thid.error est appelée
+      // indique que l'opération asynchrone est terminée sans erreur. Elle réinitialise this.error à null.
+      complete : () => this.error = null
+    })
   }
 }

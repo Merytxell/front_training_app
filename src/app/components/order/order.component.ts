@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChange } from '@angular/core';
 import { Router } from '@angular/router';
 import { Customer } from 'src/app/model/customer.model';
 import { CartService } from 'src/app/services/cart.service';
@@ -17,8 +17,20 @@ export class OrderComponent implements OnInit {
   customer : Customer | undefined;
   constructor(public cartService : CartService, private router : Router) { }
 
+  ngOnchanges(changes : SimpleChange): void {
+  console.log('ngOnChanges' + changes)
+  }
+
   ngOnInit(): void {
     this.customer = this.cartService.getCustomer();
+  }
+
+  ngDoCheck(): void {
+    console.log('ngDoCheck')
+  }
+
+  ngOnDestroy():void{
+    console.log('ngOnDestroy')
   }
 
   /**

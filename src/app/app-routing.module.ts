@@ -5,8 +5,16 @@ import { TrainingsComponent } from './components/trainings/trainings.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { CustomerComponent } from './components/customer/customer.component';
 import { OrderComponent } from './components/order/order.component';
+import { AdminGuard } from './components/admin.guard';
+import { AdminComponent } from './admin/admin.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
+  {
+    path : 'admin', component : AdminComponent,
+    canActivate : [ AdminGuard]
+  },
+    { path : 'login', component :LoginComponent},
     { path : 'trainings', component : TrainingsComponent },
     { path : 'cart' , component : CartComponent },
     { path : 'order' , component : OrderComponent},
