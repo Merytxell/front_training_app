@@ -1,7 +1,10 @@
 import { Component, OnInit, SimpleChange } from '@angular/core';
 import { Router } from '@angular/router';
 import { Customer } from 'src/app/model/customer.model';
+import { AuthenticateService } from 'src/app/services/authenticate.service';
 import { CartService } from 'src/app/services/cart.service';
+
+
 
 @Component({
   selector: 'app-order',
@@ -15,7 +18,9 @@ import { CartService } from 'src/app/services/cart.service';
 export class OrderComponent implements OnInit {
   dateOrder : Date = new Date();
   customer : Customer | undefined;
-  constructor(public cartService : CartService, private router : Router) { }
+  isConnected : boolean = false;
+  
+  constructor(public cartService : CartService, private authService : AuthenticateService, private router : Router) { }
 
   ngOnchanges(changes : SimpleChange): void {
   console.log('ngOnChanges' + changes)
@@ -23,7 +28,19 @@ export class OrderComponent implements OnInit {
 
   ngOnInit(): void {
     this.customer = this.cartService.getCustomer();
+    const user= this.authService.getUser();
+    if (user) {
+      if (user.customer) {
+        this.customer = user.customer;
+        this.isConnected=true;
+      } else {
+        console.log("Aucune information de client trouvée pour l'utilisateur connecté.");
+      }
+    } else {
+      console.log("Aucun utilisateur connecté.");
+    }
   }
+   
 
   ngDoCheck(): void {
     console.log('ngDoCheck')
@@ -40,7 +57,9 @@ export class OrderComponent implements OnInit {
   onOrder(){
     if(confirm("Aujourd'hui c'est gratuit, merci de votre visite :)")){
         this.cartService.clearLocalStorage();
-        this.router.navigateByUrl('');
+        this.router.navigateByUrl('/trainings');
+    }else {
+      alert("Vous devez vous connecter pour passer une commande.");
     }
   }
 }

@@ -21,6 +21,7 @@ private users = [
   existingUser(email : string, password : string) : boolean{
     const user = this.users.find(u => u.email === email && u.password === password);
     if(user){
+      this.encryptedUser(user);
       this.saveUser(user);
       return true;
     }
@@ -33,30 +34,20 @@ private users = [
   * @param password 
   * @returns 
   */
-  encryptedUser (email : string, password : string) : boolean {
-    const user = this.users.find ( u => u.email === email && u.password === password);
-    if (user){
-      const cryptedEmail = this.cryptoService.encrypt(user.password);
-      const cryptedPassword = this.cryptoService.encrypt(user.email);
-      this.saveUser(user)
-      return true;
+  encryptedUser (user : User) {
+      user.password = this.cryptoService.encrypt(user.password);
+      user.email= this.cryptoService.encrypt(user.email);
+      console.log(user.password);
+     
     }
-    return false;
-
-  }
 
 /**
  * Methode pour décrypter les données users
  */
-  decryptedUser (email : string, password : string) : boolean  {
-    const user = this.users.find (u => u.email === email && u.password === password);
-    if (user){
-      const decryptedEmail = this.cryptoService.decrypt(user.password);
-      const decryptedPassword = this.cryptoService.decrypt(user.email);
-      this.saveUser(user);
-      return true;
-    }
-    return false;
+  decryptedUser (user : User)  {
+  user.password = this.cryptoService.decrypt(user.password);
+  user.email = this.cryptoService.decrypt(user.email);
+  
   }
 
   /**
