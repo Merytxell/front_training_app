@@ -13,24 +13,15 @@ private users = [
 {email:'claire@gmail.com' ,password:'1234', roles:['ADMIN','USER']},
 {email:'toto@gmail.com' ,password:'1234', roles:['USER']},
 ];
-  constructor(private cryptoService: cryptoService) { this.connectedUser = this.getUser() }
+  constructor() { this.connectedUser = this.getUser() }
   
 
   //trouver si l'user existe en comparant ce qu'il saisit aux infos dans users
   existingUser(email : string, password : string) : boolean{
-    const user = this.users.find(u => u.email === email);
+    const user = this.users.find(u => u.email === email && u.password === password);
     if(user){
-      const cryptedPassword = this.cryptoService.encrypt(user.password);
-      if(password === cryptedPassword){
-        this.saveUser(user)
-        return true;
-      }
-      const decryptedPassword = this.cryptoService.decrypt(user.password);
-      if (password === decryptedPassword){
-        this.saveUser(user);
+      this.saveUser(user);
       return true;
-      }
-      
     }
     return false;
   }
@@ -69,6 +60,5 @@ private users = [
     return false;
   }
 }
-
 
 
